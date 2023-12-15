@@ -3,8 +3,10 @@ import "./App.css";
 import axios from "axios";
 import CountUp from "react-countup";
 import { FallingConfetti } from "./Confetti/Confetti";
+import { useTabFocus } from "./hooks/useIsTabFocused";
 
 function App() {
+	const isTabFocused = useTabFocus();
 
 	const metrics = useQuery({
 		queryKey: ["Metrics"],
@@ -15,7 +17,7 @@ function App() {
 			oneYearAgo.setFullYear(now.getFullYear() - 1);
 			const query = {
 				timespan: `${oneYearAgo.toISOString()}/${now.toISOString()}`,
-        aggregation: 'sum'
+				aggregation: "sum",
 			};
 			const data = await axios.get(apiUrl, {
 				headers: {
@@ -24,24 +26,19 @@ function App() {
 				},
 				params: query,
 			});
-			return data.data?.value?.['customMetrics/RunCount']?.sum;
+			return data.data?.value?.["customMetrics/RunCount"]?.sum;
 		},
+		refetchInterval: isTabFocused ? 4000 : null,
 	});
 
-	return <>
-  <FallingConfetti />
-  <div style={{width: '100%', height: '100%', display: 'grid', placeItems: 'center'}}>
-
-  <CountUp
-  style={{fontSize: '72px'}}
-  start={0}
-  end={metrics.data}
-  duration={2.75}
-  suffix=" Reports Ran"
->
-</CountUp>
-  </div>
-  </>;
+	return (
+		<>
+			<FallingConfetti />
+			<div style={{ width: "100%", height: "100%", display: "grid", placeItems: "center" }}>
+				<CountUp style={{ fontSize: "72px" }} start={0} end={metrics.data} duration={2.75} suffix=' Reports Ran'></CountUp>
+			</div>
+		</>
+	);
 }
 
 export default App;
