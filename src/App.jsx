@@ -35,7 +35,7 @@ function App() {
 		<>
 			<FallingConfetti />
 			<div style={{ width: "100%", height: "100%", display: "grid", placeItems: "center" }}>
-				<CountUp style={{ fontSize: "72px" }} start={0} end={metrics.data} duration={2.75} suffix=' Reports Ran'></CountUp>
+				<CountUp preserveValue style={{ fontSize: "72px" }} start={0} end={metrics.data} duration={2.75} suffix=' Reports Ran'></CountUp>
 			</div>
 		</>
 	);
